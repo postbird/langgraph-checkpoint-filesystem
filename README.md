@@ -1,23 +1,47 @@
-# Rslib project
+# langgraph-checkpoint-filesystem
 
-## Setup
+An implementation of the `Checkpointer` interface for LangGraph.js, uses file storage to persist state.
 
-Install the dependencies:
+## File storage hierarchy
 
-```bash
-pnpm install
+```
+|- /{thread_id}
+|- |- /{checkpoint_ns}
+|- |- |- /{checkpoint_id}
+|- |- |- |- /writes
+|- |- |- |- |- {task_id}$$${channel}$$${idx}
+|- |- |- |- /checkpoints
+|- |- |- |- |- extra.json
+|- |- |- |- |- metadata
+|- |- |- |- |- checkpoint
 ```
 
-## Get started
+- `checkpoint_ns`: will use `__DEFAULT_NS__` if the ns is empty string `""`;
+- `{task_id}$$${channel}$$${idx}`: each writes file is a binary file
+- `extra.json`: some extra params of this checkpoint like `parentCheckpointId`
+- `metadata`: binary file of this checkpoint's metadata
+- `checkpoint`: binary file of this checkpoint
 
-Build the library:
+## How to use
+
+### Install dependency
 
 ```bash
-pnpm build
+pnpm add langgraph-checkpoint-filesystem
 ```
 
-Build the library in watch mode:
+### Add to your graph
 
-```bash
-pnpm dev
+```ts
+
+```
+
+### Params
+
+## Development
+
+### test
+
+```ts
+pnpm run test
 ```
