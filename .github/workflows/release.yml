@@ -2,43 +2,50 @@ name: Release
 
 on:
   push:
-    branches: ["main"]
-  workflow_dispatch: # Allows triggering the workflow manually in GitHub UI
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+    branches: [main]
 
 permissions:
   contents: write
   pull-requests: write
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    env:
-      PUPPETEER_SKIP_DOWNLOAD: "true"
-      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "true"
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v5
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Setup Node.js 22.4.1
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "22.4.1"
-          cache: "yarn"
+          node-version: 20
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
 
-      - name: Install Dependencies
-        run: yarn install --immutable
+      - name: Setup pnpm
+        run: npm install -g pnpm
 
-      - name: Create Release Pull Request or Publish to npm
-        id: changesets
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Create or update release pull request
         uses: changesets/action@v1
         with:
-          publish: yarn release
-          version: yarn changeset version
+          commit: 'chore: version packages'
+          title: '🚀 Release version'
+          hasPublishScript: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm
+        if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, '🚀 Release version')
+        run: pnpm changeset publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
