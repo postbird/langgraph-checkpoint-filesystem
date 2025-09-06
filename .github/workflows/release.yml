@@ -47,6 +47,11 @@ jobs:
       - name: Build package
         run: pnpm run build
 
+      - name: Check NPM Token
+        run: echo "NODE_AUTH_TOKEN is $NODE_AUTH_TOKEN"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       # Publish step will always run when there's a push to main
       - name: Publish to npm
         run: pnpm changeset publish
