@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   version:
-    if: ${{ github.event.head_commit.message != 'chore: release' }}
+    if: github.event.head_commit != null && github.event.head_commit.message != 'chore: release'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -36,16 +36,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Create or update release pull request
+      - name: Create release pull request
         uses: changesets/action@v1
         with:
-          commit: 'chore: release'
-          title: '🚀 Release version'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish:
-    if: ${{ github.event.head_commit.message == 'chore: release' }}
+    if: github.event.head_commit != null && github.event.head_commit.message == 'chore: release'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -70,13 +68,11 @@ jobs:
       - name: Build package
         run: pnpm run build
 
-      - name: Check NPM Token
-        run: echo "NODE_AUTH_TOKEN is $NODE_AUTH_TOKEN"
+      - name: Authenticate with npm
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Authenticate with npm
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
       - name: Publish to npm
         run: pnpm changeset publish
