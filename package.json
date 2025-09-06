@@ -36,6 +36,7 @@
     "format": "prettier --write .",
     "lint": "eslint .",
     "prepare": "husky install",
+    "publish": "npm publish",
     "test": "rstest"
   },
   "devDependencies": {
