@@ -1,5 +1,11 @@
 # langgraph-checkpoint-filesystem
 
+## 0.1.1
+
+### Patch Changes
+
+- 3011038: ci
+
 ## 0.1.0
 
 ### Minor Changes
