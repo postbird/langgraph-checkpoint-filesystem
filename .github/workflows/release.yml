@@ -13,9 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # 生成或更新 release PR
   version:
-    if: github.event.head_commit.message != 'chore: release'
+    if: ${{ github.event.head_commit.message != 'chore: release' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -45,9 +44,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  # 真正发布 npm
   publish:
-    if: github.event.head_commit.message == 'chore: release'
+    if: ${{ github.event.head_commit.message == 'chore: release' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
