@@ -13,8 +13,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  release:
-    name: Release
+  # 生成或更新 release PR
+  version:
+    if: github.event.head_commit.message != 'chore: release'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -39,12 +40,35 @@ jobs:
       - name: Create or update release pull request
         uses: changesets/action@v1
         with:
-          commit: 'chore: version packages'
+          commit: 'chore: release'
           title: '🚀 Release version'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Build step will always run when there's a push to main
+  # 真正发布 npm
+  publish:
+    if: github.event.head_commit.message == 'chore: release'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.x
+
+      - name: Install dependencies
+        run: pnpm install
+
       - name: Build package
         run: pnpm run build
 
@@ -56,7 +80,6 @@ jobs:
       - name: Authenticate with npm
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
-      # Publish step will always run when there's a push to main
       - name: Publish to npm
         run: pnpm changeset publish
         env:
