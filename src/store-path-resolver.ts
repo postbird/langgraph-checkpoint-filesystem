@@ -1,15 +1,19 @@
 export class StorePathResolver {
-  private rootFolder: string;
-  private splitter: string;
+  public rootFolder: string;
+  public splitter: string;
   public readonly defaultCheckpointNs = '__DEFAULT_NS__';
 
-  constructor(rootFolder: string, splitter: string) {
-    this.rootFolder = rootFolder;
-    this.splitter = splitter;
+  constructor(rootFolder?: string, splitter?: string) {
+    this.rootFolder = rootFolder ?? './checkpoint-file-store';
+    this.splitter = splitter ?? '$$';
   }
 
   public joinWithSplitter(...args: (string | number)[]) {
     return args?.join(this.splitter);
+  }
+
+  public splitWithSplitter(str: string) {
+    return str.split(this.splitter);
   }
 
   public getThreadPath(threadId: string) {

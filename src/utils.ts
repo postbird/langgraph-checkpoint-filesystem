@@ -26,6 +26,16 @@ export const readBinary = async (filePath: string) => {
   return new Uint8Array(buffer);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const writeJSON = async (filePath: string, data: any) => {
+  await writeFile(filePath, JSON.stringify(data, null, 2));
+};
+
+export const readJSON = async (filePath: string) => {
+  const data = await readFile(filePath, 'utf-8');
+  return JSON.parse(data);
+};
+
 export const safeDeleteFile = async (filePath: string) => {
   await rm(filePath, { recursive: true, force: true });
 };

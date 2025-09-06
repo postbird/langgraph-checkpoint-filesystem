@@ -1,6 +1,6 @@
 # langgraph-checkpoint-filesystem
 
-An implementation of the `Checkpointer` of Langgraph.js, based on the disk file storage.
+An implementation of the `Checkpointer` interface for LangGraph.js, uses file storage to persist state.
 
 ## File storage hierarchy
 
@@ -37,3 +37,11 @@ pnpm add langgraph-checkpoint-filesystem
 ```
 
 ### Params
+
+## Development
+
+### test
+
+```ts
+pnpm run test
+```
