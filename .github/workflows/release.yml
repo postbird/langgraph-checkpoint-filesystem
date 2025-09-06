@@ -40,7 +40,6 @@ jobs:
         with:
           commit: 'chore: version packages'
           title: '🚀 Release version'
-          hasPublishScript: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
