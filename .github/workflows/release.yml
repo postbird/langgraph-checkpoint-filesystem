@@ -44,6 +44,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Build package
+        if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, '🚀 Release version')
+        run: pnpm run build
+
       - name: Publish to npm
         if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && startsWith(github.event.pull_request.title, '🚀 Release version')
         run: pnpm changeset publish
