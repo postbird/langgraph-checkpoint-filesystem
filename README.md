@@ -4,6 +4,8 @@
 
 An implementation of the `Checkpointer` interface for LangGraph.js, uses file storage to persist state.
 
+[https://www.npmjs.com/package/langgraph-checkpoint-filesystem](https://www.npmjs.com/package/langgraph-checkpoint-filesystem)
+
 ## File storage hierarchy
 
 ```
