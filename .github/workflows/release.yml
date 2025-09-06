@@ -13,8 +13,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  version:
-    if: github.event.head_commit != null && github.event.head_commit.message != 'chore: release'
+  release:
+    name: Release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -36,44 +36,27 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Create release pull request
+      - name: Create or update release pull request
         uses: changesets/action@v1
         with:
+          commit: 'chore: version packages'
+          title: '🚀 Release version'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  publish:
-    if: github.event.head_commit != null && github.event.head_commit.message == 'chore: release'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.x
-
-      - name: Install dependencies
-        run: pnpm install
-
+      # Build step will always run when there's a push to main
       - name: Build package
         run: pnpm run build
 
-      - name: Authenticate with npm
-        run: |
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+      - name: Check NPM Token
+        run: echo "NODE_AUTH_TOKEN is $NODE_AUTH_TOKEN"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Authenticate with npm
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
+      # Publish step will always run when there's a push to main
       - name: Publish to npm
         run: pnpm changeset publish
         env:
