@@ -1,5 +1,11 @@
 # langgraph-checkpoint-filesystem
 
+## 0.2.2
+
+### Patch Changes
+
+- 481d1dd: new
+
 ## 0.2.1
 
 ### Patch Changes
