@@ -1,5 +1,11 @@
 # langgraph-checkpoint-filesystem
 
+## 0.1.4
+
+### Patch Changes
+
+- 3e661cc: ci
+
 ## 0.1.3
 
 ### Patch Changes
