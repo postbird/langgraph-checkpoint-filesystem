@@ -1,5 +1,15 @@
 # langgraph-checkpoint-filesystem
 
+## 0.2.0
+
+### Minor Changes
+
+- 0f55868: new version
+
+### Patch Changes
+
+- 1102298: doc
+
 ## 0.1.4
 
 ### Patch Changes
