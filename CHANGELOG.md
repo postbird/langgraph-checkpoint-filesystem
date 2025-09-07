@@ -1,5 +1,11 @@
 # langgraph-checkpoint-filesystem
 
+## 0.2.3
+
+### Patch Changes
+
+- d5f8805: new version
+
 ## 0.2.2
 
 ### Patch Changes
