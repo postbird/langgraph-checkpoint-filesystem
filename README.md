@@ -6,6 +6,15 @@ An implementation of the `Checkpointer` interface for LangGraph.js, uses file st
 
 [https://www.npmjs.com/package/langgraph-checkpoint-filesystem](https://www.npmjs.com/package/langgraph-checkpoint-filesystem)
 
+Version required:
+
+```json
+  "peerDependencies": {
+    "@langchain/core": "^0.3.74",
+    "@langchain/langgraph-checkpoint": "^0.1.1"
+  },
+```
+
 ## File storage hierarchy
 
 ```
